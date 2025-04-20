@@ -3,6 +3,9 @@ import { MessageCircle, FileText, Send, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FormData } from '../assessment/AssessmentForm';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 type Message = {
   id: string;
@@ -11,23 +14,23 @@ type Message = {
   timestamp: Date;
 };
 
-const mockMessages = [
-  "I'll help you understand the changes in your body during pregnancy.",
-  "Here's some information about managing morning sickness in the first trimester.",
-  "Based on your medical history, I recommend consulting with your doctor about these symptoms.",
-  "According to research, gentle exercise like walking can be beneficial throughout pregnancy.",
-  "I've generated a personalized report based on your assessment data."
-];
+declare module 'jspdf' {
+  interface jsPDF {
+    autoTable: typeof autoTable;
+  }
+}
+
 
 const Chatbot = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [assessmentData, setAssessmentData] = useState<FormData | null>(null);
-  const [showReport, setShowReport] = useState(false);
+  const [generatingReport, setGeneratingReport] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
   
   useEffect(() => {
     const storedData = localStorage.getItem('assessmentData');
@@ -41,7 +44,6 @@ const Chatbot = () => {
       content: 'Hello! I\'m your Gentle Birth Assistant. How can I help you today?',
       timestamp: new Date()
     };
-    
     setMessages([initialMessage]);
     
     if (inputRef.current) {
@@ -49,15 +51,7 @@ const Chatbot = () => {
     }
   }, []);
   
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-  
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-  
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
     
     const userMessage: Message = {
@@ -71,20 +65,160 @@ const Chatbot = () => {
     setInput('');
     setLoading(true);
     
-    setTimeout(() => {
-      const randomResponse = mockMessages[Math.floor(Math.random() * mockMessages.length)];
+    try {
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+      
+      const context = assessmentData ? `
+        Context:Act as a compassionate and supportive companion for pregnant women and mothers who may be experiencing challenges related to health, emotional well-being, or physical conditions.
+
+        When conversing, always prioritize empathy, patience, and warmth.
+
+        Adapt your tone to the emotional needs of the user: offer encouragement, active listening, and thoughtful responses.
+
+        Use the context and parameters provided by the user to personalize your support, acknowledging their feelings and offering gentle advice or reassurance when appropriate.
+
+        Avoid judgment, minimize giving unsolicited advice, and focus on creating a safe, comforting environment where the user feels heard, respected, and cared for.
+
+        Make sure the generated response does not exceed 3-4 sentences maximum.
+
+        Try to diversify your answers and intro/opening responses and try to be as personal possible
+
+        Patient Profile:
+        - Age: ${assessmentData.age}
+        - Pregnancy Status: ${assessmentData.isPregnant ? 'Pregnant (Week ' + assessmentData.pregnancyWeek + ')' : 'Not Pregnant'}
+        - Conditions: ${assessmentData.conditions.join(', ') || 'None'}
+        - Medications: ${assessmentData.medications.join(', ') || 'None'}
+      ` : 'No patient assessment data available';
+      
+      const result = await model.generateContent({
+        contents: [{
+          role: 'user',
+          parts: [{
+            text: `Context: ${context}\n\nPatient Question: ${input}\n\nPlease provide a helpful response in English.`
+          }]
+        }],
+      });
       
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: 'bot',
-        content: randomResponse,
+        content: result.response.text(),
         timestamp: new Date()
       };
       
       setMessages((prev) => [...prev, botMessage]);
+    } catch (error) {
+      toast.error("Failed to get AI response");
+      console.error('Gemini error:', error);
+    } finally {
       setLoading(false);
-    }, 3000);
+    }
   };
+  
+  const generateAndDownloadPDF = async () => {
+    if (!assessmentData) {
+      toast.error("Please complete the health assessment first");
+      return;
+    }
+    
+    setGeneratingReport(true);
+    
+    try {
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+      
+      // Generate report content
+      const prompt = `
+        Generate a comprehensive pregnancy health report in English based on:
+        
+        1. Patient Assessment:
+           - Age: ${assessmentData.age}
+           - Pregnancy Week: ${assessmentData.pregnancyWeek}
+           - Medical Conditions: ${assessmentData.conditions.join(', ') || 'None'}
+           - Current Medications: ${assessmentData.medications.join(', ') || 'None'}
+        
+        2. Conversation History for context:
+           ${messages.map(m => `${m.type}: ${m.content}`).join('\n')}
+        
+        Format:
+        - Executive Brief Summary (2-3 sentences)
+        - Key Health Considerations
+        - Medication Safety Analysis
+        - Recommended Next Steps
+        - Important Warnings (if any)
+        
+        Return ONLY the report content in clear paragraphs, no JSON or special formatting.
+      `;
+      
+      const result = await model.generateContent(prompt);
+      const reportContent = result.response.text();
+      
+      // Create PDF
+      const doc = new jsPDF();
+      
+      // Header with blue accent
+      doc.setFillColor(59, 130, 246);
+      doc.rect(0, 0, 210, 20, 'F');
+      doc.setFontSize(16);
+      doc.setTextColor(255, 255, 255);
+      doc.text('Pregnancy Health Report', 105, 15, { align: 'center' });
+      
+      // Reset text color
+      doc.setTextColor(0, 0, 0);
+      
+      // Patient Information
+      autoTable(doc, {
+        head: [['Patient Information']],
+        headStyles: {
+          fillColor: [59, 130, 246],
+          textColor: 255,
+          fontStyle: 'bold'
+        },
+        body: [
+          [`Age: ${assessmentData.age || 'N/A'}`],
+          [`Pregnancy Week: ${assessmentData.pregnancyWeek || 'N/A'}`],
+          [`Conditions: ${assessmentData.conditions.join(', ') || 'None'}`],
+          [`Medications: ${assessmentData.medications.join(', ') || 'None'}`]
+        ],
+        startY: 30,
+        theme: 'grid',
+        styles: { 
+          cellPadding: 6,
+          fontSize: 12,
+          textColor: [31, 41, 55]
+        }
+      });
+      
+      // Medical Report Content
+      const lines = doc.splitTextToSize(reportContent, 180);
+      doc.setFontSize(11);
+      doc.text(lines, 15, (doc as any).lastAutoTable.finalY + 20);
+      
+      // Footer
+      doc.setFontSize(10);
+      doc.setTextColor(107, 114, 128);
+      // doc.text('Generated by Pregnancy Health Assistant - Confidential Medical Document', 105, 285, { align: 'center' });
+      
+      // Save PDF
+      doc.save('pregnancy-health-report.pdf');
+      
+      toast.success("PDF report downloaded successfully");
+    } catch (error) {
+      toast.error("Failed to generate report");
+      console.error('Report generation error:', error);
+    } finally {
+      setGeneratingReport(false);
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+  
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+  
+
   
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -96,7 +230,6 @@ const Chatbot = () => {
       return;
     }
     
-    setShowReport(true);
   };
   
   const hasCompletedAssessment = !!assessmentData;
@@ -129,17 +262,19 @@ const Chatbot = () => {
         </div>
         
         <button
-          onClick={generateReport}
+          onClick={generateAndDownloadPDF}
           className={`flex items-center px-3 py-1.5 rounded-lg text-sm ${
             hasCompletedAssessment 
               ? 'bg-blue-600 text-white hover:bg-blue-700' 
               : 'bg-gray-200 text-gray-500 cursor-not-allowed'
           }`}
-          disabled={!hasCompletedAssessment}
+          disabled={!hasCompletedAssessment || generatingReport}
         >
           <FileText className="w-4 h-4 mr-1" />
-          <span>Generate Report</span>
+          {generatingReport ? 'Generating PDF...' : 'Download Report'}
         </button>
+
+        
       </div>
       
       <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
@@ -225,120 +360,9 @@ const Chatbot = () => {
         )}
       </div>
       
-      {showReport && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto animate-fade-in">
-            <div className="flex justify-between items-center p-4 border-b border-gray-200">
-              <h2 className="font-semibold text-xl text-gray-900">Your Personalized Health Report</h2>
-              <button 
-                onClick={() => setShowReport(false)}
-                className="text-gray-600 hover:text-gray-800"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <div className="p-6">
-              <div className="mb-6">
-                <h3 className="font-semibold text-gray-900 mb-2">Basic Information</h3>
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="text-sm">
-                      <span className="text-gray-600">Age:</span>
-                      <span className="text-gray-900 ml-2">{assessmentData?.age} years</span>
-                    </div>
-                    <div className="text-sm">
-                      <span className="text-gray-600">Pregnancy Status:</span>
-                      <span className="text-gray-900 ml-2">{assessmentData?.isPregnant ? 'Pregnant' : 'Not Pregnant'}</span>
-                    </div>
-                    {assessmentData?.isPregnant && (
-                      <div className="text-sm">
-                        <span className="text-gray-600">Current Week:</span>
-                        <span className="text-gray-900 ml-2">{assessmentData?.pregnancyWeek}</span>
-                      </div>
-                    )}
-                    <div className="text-sm">
-                      <span className="text-gray-600">Taking Medications:</span>
-                      <span className="text-gray-900 ml-2">{assessmentData?.takingMedications ? 'Yes' : 'No'}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {assessmentData?.hasPreExistingConditions && assessmentData.conditions.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">Pre-existing Conditions</h3>
-                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <div className="flex flex-wrap gap-2">
-                      {assessmentData.conditions.map((condition, index) => (
-                        <span key={index} className="bg-blue-100 px-3 py-1 rounded-full text-sm text-gray-900">
-                          {condition}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              {assessmentData?.takingMedications && assessmentData.medications.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">Current Medications</h3>
-                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <ul className="space-y-2">
-                      {assessmentData.medications.map((med, index) => (
-                        <li key={index} className="text-sm text-gray-900">• {med}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )}
-              
-              <div className="mb-6">
-                <h3 className="font-semibold text-gray-900 mb-2">Recommendations</h3>
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                  <div className="space-y-4">
-                    <p className="text-sm text-gray-900">
-                      {assessmentData?.isPregnant 
-                        ? `Based on your pregnancy status (Week ${assessmentData.pregnancyWeek}), we recommend regular check-ups with your healthcare provider.`
-                        : "Based on your health profile, we recommend focusing on general wellness and preventive care."}
-                    </p>
-                    
-                    {assessmentData?.isPregnant && (
-                      <div className="text-sm text-gray-900">
-                        <p className="font-medium mb-1">For your current stage:</p>
-                        <ul className="list-disc pl-5 space-y-1">
-                          <li>Stay hydrated and maintain a balanced diet rich in essential nutrients</li>
-                          <li>Engage in gentle exercise appropriate for your trimester</li>
-                          <li>Monitor any unusual symptoms and report them to your doctor</li>
-                          <li>Consider joining a prenatal support group</li>
-                        </ul>
-                      </div>
-                    )}
-                    
-                    {assessmentData?.takingMedications && (
-                      <p className="text-sm text-gray-900">
-                        Please consult with your healthcare provider about the safety of your current medications{assessmentData.isPregnant ? ' during pregnancy' : ''}.
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="text-center p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-700 text-sm">
-                <p className="font-bold text-blue-600 mb-1">Important Disclaimer</p>
-                <p>This report is for informational purposes and not a substitute for medical advice. Always consult your healthcare provider.</p>
-                <div className="flex justify-center mt-4">
-                  <button
-                    className="flex items-center px-32 py-2 rounded-lg text-sm bg-blue-600 text-white hover:bg-blue-700"
-                  >
-                    <span>Download PDF</span>
-                  </button>  
-                </div>           
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      
+
+
     </div>
   );
 };

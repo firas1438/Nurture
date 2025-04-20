@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { X, FileText, Upload, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { parseGeminiResponse } from '@/lib/parse_gemni_response';
 
 type DetectionResult = {
   name: string;
@@ -40,17 +42,27 @@ const MedicineDetector = () => {
         toast.error("Please upload an image file.");
         return;
       }
+      
       const reader = new FileReader();
-      reader.onload = () => {
+      reader.onload = async() => {
         const imageDataUrl = reader.result as string;
         setCapturedImage(imageDataUrl);
-        detectMedicine(imageDataUrl);
+        await detectMedicine(file);
       };
       reader.onerror = () => {
         toast.error("Failed to read the image file.");
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const convertImageToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result?.toString().split(',')[1] || '');
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
   };
 
   const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,15 +90,58 @@ const MedicineDetector = () => {
     setIsDragging(false);
   };
 
-  const detectMedicine = (imageUrl: string) => {
+  const detectMedicine = async (file:File) => {
     setLoading(true);
     // Simulate API call delay
-    setTimeout(() => {
-      const randomResult = mockDetectionResults[Math.floor(Math.random() * mockDetectionResults.length)];
-      setDetectionResult(randomResult);
+    const GEMINI_API_KEY =import.meta.env.VITE_GEMINI_API_KEY;
+    const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+    try{
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+      const imageBase64 = await convertImageToBase64(file);
+
+      const imagePart = {
+        inlineData: {
+          data: imageBase64,
+          mimeType: file.type,
+        },
+      };
+
+      const prompt = `
+Analyze this medication packaging and return ONLY valid JSON:
+{
+  "nom": "Medication name",
+  "paragraphe": "Description of pregnancy effects (3-5 sentences in English)",
+  "alert": "safe/warning/danger"
+}
+
+Strict rules:
+- "paragraph" must be in clear English
+- "alert" level based on risk category
+- No comments outside JSON
+- No additional elements
+    `;
+
+    const result = await model.generateContent([prompt, imagePart]);
+    const response = await result.response;
+    const text = response.text();
+    const parse_gemini = parseGeminiResponse(text);
+    const medicationData: DetectionResult = {
+      name: parse_gemini.nom || 'Unknown',
+      safetyRating: parse_gemini.alert === 'safe' ? 'safe' : parse_gemini.alert === 'warning' ? 'caution' : 'unsafe',
+      description: parse_gemini.paragraphe || 'No description available.'
+    };
+    setDetectionResult(medicationData);
+
+    }
+    catch(error){
+      toast.error("Error during image detection: " + error.message);
+    }
+    finally {
       setLoading(false);
-    }, 2000);
+    }
+
   };
+
 
   const resetDetection = () => {
     setCapturedImage(null);
