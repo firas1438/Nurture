@@ -1,73 +1,55 @@
-# Welcome to your Lovable project
+🤰 AI-Powered Pregnancy Support Application
 
-## Project info
+Welcome to Nurture — your smart companion for a healthy pregnancy journey.This project empowers expecting mothers by offering personalized advice, medication checks, and continuous AI support.
 
-**URL**: https://lovable.dev/projects/06a0d8ba-a75b-4b42-9e8f-985835b21f64
+🚀 Key Features
 
-## How can I edit this code?
+Personalized health assessment through an easy form
 
-There are several ways of editing your application.
+Real-time AI assistant for pregnancy-related advice and tips
 
-**Use Lovable**
+Medication safety checker via image upload
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/06a0d8ba-a75b-4b42-9e8f-985835b21f64) and start prompting.
+Modern, accessible, and responsive interface
 
-Changes made via Lovable will be committed automatically to this repo.
+Built with cutting-edge web technologies for a smooth experience
 
-**Use your preferred IDE**
+🌐 Live Demo
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Try it here 👉 Click to open the live app
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+⚙️ How It Works
 
-Follow these steps:
+Complete AssessmentAnswer personalized health questions to guide your pregnancy journey.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Get AI SupportChat with our AI assistant for tailored advice and pregnancy tips.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Check MedicineAttach images of medications to verify their safety during pregnancy.
 
-# Step 3: Install the necessary dependencies.
-npm i
+🛠️ Built With
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+Vite
+
+TypeScript
+
+React
+
+shadcn-ui
+
+Tailwind CSS
+
+💻 Getting Started
+
+Clone the project
+
+git clone https://github.com/firas1438/nurture.git
+cd nurture
+
+Install dependencies
+
+npm install
+
+Start the application
+
 npm run dev
-```
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/06a0d8ba-a75b-4b42-9e8f-985835b21f64) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
