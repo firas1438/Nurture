@@ -61,10 +61,10 @@ const PregnancyQuestion: React.FC<PregnancyQuestionProps> = ({
 
   return (
     <div className="form-question">
-      <h2 className="text-2xl font-semibold text-blue-800 mb-3 text-center">
+      <h2 className="text-2xl font-semibold text-blue-600 mb-3 text-center">
         Are you currently pregnant?
       </h2>
-      <p className="text-blue-600 mb-8 text-center">
+      <p className="text-black mb-8 text-center">
         Your answer will help us tailor our assistance to your needs.
       </p>
 

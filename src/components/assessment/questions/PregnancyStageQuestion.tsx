@@ -45,8 +45,8 @@ const PregnancyStageQuestion: React.FC<PregnancyStageQuestionProps> = ({ week, o
 
   return (
     <div className="form-question">
-      <h2 className="text-2xl font-semibold text-blue-800 mb-3 text-center mt-6">How far along are you?</h2>
-      <p className="text-blue-600 mb-6 text-center">This helps us provide stage-appropriate advice.</p>
+      <h2 className="text-2xl font-bold text-black mb-3 text-center mt-12">How far along are you?</h2>
+      <p className="text-black mb-6 text-center">This helps us provide stage-appropriate advice.</p>
       
       {!selectedTrimester ? (
         <div className="space-y-4 w-full">
@@ -57,8 +57,8 @@ const PregnancyStageQuestion: React.FC<PregnancyStageQuestionProps> = ({ week, o
               className="w-full p-4 border border-blue-200 rounded-xl bg-white hover:bg-blue-50 text-left transition-colors"
               onClick={() => selectTrimester(trimester)}
             >
-              <div className="font-medium text-blue-800">{getTrimesterName(trimester)}</div>
-              <div className="text-sm text-blue-600 mt-1">
+              <div className="font-medium text-black">{getTrimesterName(trimester)}</div>
+              <div className="text-sm text-black mt-1">
                 {trimester === 1 ? "Early development stage" : 
                  trimester === 2 ? "Baby growth & movement" : 
                  "Final preparation for birth"}
@@ -78,7 +78,7 @@ const PregnancyStageQuestion: React.FC<PregnancyStageQuestionProps> = ({ week, o
             </button>
           </div>
           
-          <p className="text-blue-700 text-sm mb-1">Select your current week:</p>
+          <p className="text-black text-sm mb-1">Select your current week:</p>
           <div className="grid grid-cols-4 gap-2">
             {getWeeksByTrimester().map((weekNum) => (
               <div

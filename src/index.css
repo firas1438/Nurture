@@ -109,7 +109,7 @@
   }
   
   .form-button {
-    @apply px-6 py-2 rounded-full bg-beige-500 text-white font-medium shadow-md hover:bg-beige-600 transition-colors;
+    @apply px-6 py-2 rounded-full bg-blue-500 text-white font-medium shadow-md hover:bg-beige-600 transition-colors;
   }
   
   .chat-message {

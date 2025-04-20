@@ -43,8 +43,8 @@ const PreExistingConditionsQuestion: React.FC<PreExistingConditionsQuestionProps
 
   return (
     <div className="form-question">
-      <h2 className="text-2xl font-semibold text-blue-800 mb-3 text-center">Do you have any pre-existing health conditions?</h2>
-      <p className="text-blue-600 mb-6 text-center">This information helps us provide more personalized advice.</p>
+      <h2 className="text-2xl font-bold text-blue-600 mb-3 text-center">Do you have any pre-existing health conditions?</h2>
+      <p className="text-black mb-6 text-center">This information helps us provide more personalized advice.</p>
       
       <div className="flex space-x-4 mb-6">
         <button
@@ -63,7 +63,7 @@ const PreExistingConditionsQuestion: React.FC<PreExistingConditionsQuestionProps
       
       {hasConditions && (
         <div className="w-full space-y-4 animate-fade-in">
-          <p className="text-blue-700 text-sm">Select all that apply:</p>
+          <p className="text-blue-700 text-sm mt-4">Select all that apply:</p>
           
           <div className="grid grid-cols-2 gap-2 w-full">
             {commonConditions.map((condition) => (
@@ -81,15 +81,7 @@ const PreExistingConditionsQuestion: React.FC<PreExistingConditionsQuestionProps
             ))}
           </div>
           
-          <div>
-            <p className="text-blue-700 text-sm mb-1">Other condition (press Enter to add):</p>
-            <input
-              type="text"
-              className="w-full px-3 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-              placeholder="Type and press Enter"
-              onKeyDown={handleCustomCondition}
-            />
-          </div>
+
           
           {conditions.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-4">

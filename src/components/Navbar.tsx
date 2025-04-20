@@ -4,7 +4,7 @@ import { MessageCircle, Camera, Home, Heart, HeartCrack, BabyIcon, LucideBaby, B
 
 const Navbar = () => {
   return (
-    <nav className="bg-white/90 backdrop-blur-md shadow-md px-4 py-3 sticky top-0 z-50">
+    <nav className="bg-gray-50/90 backdrop-blur-md shadow-md px-4 py-3 sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2">
           <Baby className="w-7 h-7 text-blue-600" />

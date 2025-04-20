@@ -4,7 +4,7 @@ import { MessageCircle, Camera, FileText } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-blue-50 text-black py-6 mt-auto">
+    <footer className="bg-gray-50 text-black py-6 mt-auto">
 
       <div className="container mx-auto px-4">
         <div className=" mt-2  text-center">

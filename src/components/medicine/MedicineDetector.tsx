@@ -122,38 +122,50 @@ const MedicineDetector = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-blue-100">
-        <div className="bg-blue-50 p-4 border-b border-blue-100">
-          <h2 className="font-semibold text-blue-800 flex items-center">
-            <Upload className="w-5 h-5 mr-2" />
-            <span>Medicine Safety Detector</span>
-          </h2>
-          <p className="text-sm text-blue-600 mt-1">
-            Upload an image of your medication to check if it's safe during pregnancy.
-          </p>
+    <div className="max-w-5xl mx-auto p-6">
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+        <div className="bg-gray-100 p-4 border-b border-gray-200">
+          <div className="flex items-center">
+            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+              <Upload className="w-5 h-5 text-blue-600" />
+            </div>
+            <div>
+              <h2 className="font-semibold text-gray-900">
+                Medicine Safety Detector
+              </h2>
+              <p className="text-xs text-gray-600">
+                Upload an image of your medication to check if it's safe during
+                pregnancy.
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="p-6">
           {!capturedImage ? (
             <div
               className={`text-center py-10 border-2 border-dashed rounded-lg transition-colors ${
-                isDragging ? 'border-blue-500 bg-blue-50' : 'border-blue-200 bg-blue-100'
+                isDragging
+                  ? "border-blue-500 bg-blue-50"
+                  : "border-gray-300 bg-gray-50"
               }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
-              <div className="w-20 h-20 bg-blue-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Upload className="w-10 h-10 text-blue-500" />
+              <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Upload className="w-10 h-10 text-blue-600" />
               </div>
-              <h3 className="text-xl font-medium text-blue-800 mb-2">Medicine Detection</h3>
-              <p className="text-blue-600 max-w-md mx-auto mb-6">
-                Drag and drop a clear image of the medicine packaging or label here, or click to upload.
+              <h3 className="text-xl font-medium text-gray-900 mb-2">
+                Medicine Detection
+              </h3>
+              <p className="text-gray-600 max-w-md mx-auto mb-6">
+                Drag and drop a clear image of the medicine packaging or label
+                here, or click to upload.
               </p>
               <label
                 htmlFor="image-upload"
-                className="px-6 py-3 bg-blue-500 text-white rounded-full font-medium shadow-md hover:bg-blue-600 transition-colors cursor-pointer"
+                className="px-6 py-3 bg-blue-600 text-white rounded-full font-medium shadow-md hover:bg-blue-700 transition-colors cursor-pointer"
               >
                 Upload Image
               </label>
@@ -179,7 +191,7 @@ const MedicineDetector = () => {
                 {!detectionResult && !loading && (
                   <button
                     onClick={resetDetection}
-                    className="absolute top-2 right-2 p-2 bg-white/80 text-blue-700 rounded-full shadow-sm hover:bg-white"
+                    className="absolute top-2 right-2 p-2 bg-white/80 text-gray-600 rounded-full shadow-sm hover:bg-white hover:text-gray-800"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -188,8 +200,8 @@ const MedicineDetector = () => {
 
               {loading && (
                 <div className="mt-6 text-center py-8">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                  <p className="text-blue-700">Analyzing image...</p>
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                  <p className="text-gray-900">Analyzing image...</p>
                 </div>
               )}
 
@@ -197,28 +209,33 @@ const MedicineDetector = () => {
                 <div className="mt-6 bg-blue-50 p-6 rounded-xl animate-fade-in">
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="text-xl font-semibold text-blue-800">{detectionResult.name}</h3>
+                      <h3 className="text-xl font-semibold text-gray-900">
+                        {detectionResult.name}
+                      </h3>
                       <div className="mt-4">
                         {getSafetyBadge(detectionResult.safetyRating)}
                       </div>
                     </div>
                     <button
                       onClick={resetDetection}
-                      className="p-2 text-blue-500 hover:text-blue-700"
+                      className="p-2 text-gray-600 hover:text-gray-800"
                     >
                       <X className="w-5 h-5" />
                     </button>
                   </div>
 
-                  <div className="prose prose-sm text-black">
+                  <div className="prose prose-sm text-gray-900">
                     <p>{detectionResult.description}</p>
                   </div>
 
-                  <div className="mt-6 bg-blue-100 p-4 rounded-lg text-sm text-blue-700">
+                  <div className="mt-6 bg-blue-100 p-4 rounded-lg text-sm text-gray-900">
                     <div className="flex items-start">
-                      <FileText className="w-5 h-5 mr-2 text-blue-500 flex-shrink-0 mt-0.5" />
+                      <FileText className="w-5 h-5 mr-2 text-blue-600 flex-shrink-0 mt-0.5" />
                       <p>
-                        <span className="font-medium">Note:</span> This information is provided for educational purposes only. Always consult with your healthcare provider before taking any medication during pregnancy.
+                        <span className="font-medium">Note:</span> This
+                        information is provided for educational purposes only.
+                        Always consult with your healthcare provider before
+                        taking any medication during pregnancy.
                       </p>
                     </div>
                   </div>
@@ -226,7 +243,7 @@ const MedicineDetector = () => {
                   <div className="mt-6 flex justify-center">
                     <button
                       onClick={resetDetection}
-                      className="px-6 py-2 bg-blue-500 text-white rounded-full font-medium shadow-md hover:bg-blue-600 transition-colors"
+                      className="px-6 py-2 bg-blue-600 text-white rounded-full font-medium shadow-md hover:bg-blue-700 transition-colors"
                     >
                       Upload Another Image
                     </button>

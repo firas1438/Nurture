@@ -29,8 +29,8 @@ const MedicationQuestion: React.FC<MedicationQuestionProps> = ({
 
   return (
     <div className="form-question">
-      <h2 className="text-2xl font-semibold text-blue-800 mb-3 text-center">Are you currently taking any medications?</h2>
-      <p className="text-blue-600 mb-6 text-center">This helps us identify potential interactions or concerns.</p>
+      <h2 className="text-2xl font-bold text-blue-600 mb-3 text-center">Are you currently taking any medications?</h2>
+      <p className="text-black mb-6 text-center">This helps us identify potential interactions or concerns.</p>
       
       <div className="flex space-x-4 mb-6">
         <button
@@ -72,7 +72,7 @@ const MedicationQuestion: React.FC<MedicationQuestionProps> = ({
             <div className="mt-4 space-y-2">
               {medications.map((med, index) => (
                 <div key={index} className="flex justify-between items-center bg-blue-50 p-3 rounded-lg">
-                  <span className="text-blue-800">{med}</span>
+                  <span className="text-black">{med}</span>
                   <button
                     onClick={() => handleRemoveMedication(med)}
                     className="text-blue-500 hover:text-blue-700"
