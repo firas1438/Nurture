@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, FileText, Send, X } from 'lucide-react';
 import { toast } from 'sonner';
@@ -108,15 +107,16 @@ const Chatbot = () => {
   const hasCompletedAssessment = !!assessmentData;
   
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden h-[calc(100vh-14rem)] flex flex-col mx-auto max-w-4xl w-full border border-beige-100">
-      <div className="bg-beige-50 p-4 border-b border-beige-100 flex justify-between items-center">
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden h-[calc(100vh-14rem)] flex flex-col mx-auto max-w-4xl w-full border border-gray-200">
+      {/* Updated header with neutral gray and black text */}
+      <div className="bg-gray-100 p-4 border-b border-gray-200 flex justify-between items-center">
         <div className="flex items-center">
-          <div className="w-10 h-10 rounded-full bg-beige-200 flex items-center justify-center mr-3">
-            <MessageCircle className="w-5 h-5 text-beige-700" />
+          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+            <MessageCircle className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h2 className="font-semibold text-beige-800">AI Health Assistant</h2>
-            <p className="text-xs text-beige-600">Providing pregnancy guidance and support</p>
+            <h2 className="font-semibold text-gray-900">AI Health Assistant</h2>
+            <p className="text-xs text-gray-600">Providing pregnancy guidance and support</p>
           </div>
         </div>
         
@@ -124,8 +124,8 @@ const Chatbot = () => {
           onClick={generateReport}
           className={`flex items-center px-3 py-1.5 rounded-lg text-sm ${
             hasCompletedAssessment 
-              ? 'bg-beige-500 text-white hover:bg-beige-600' 
-              : 'bg-beige-100 text-beige-400 cursor-not-allowed'
+              ? 'bg-blue-600 text-white hover:bg-blue-700' 
+              : 'bg-gray-200 text-gray-500 cursor-not-allowed'
           }`}
           disabled={!hasCompletedAssessment}
         >
@@ -133,31 +133,32 @@ const Chatbot = () => {
           <span>Generate Report</span>
         </button>
       </div>
-
-
       
-      <div className="flex-1 overflow-y-auto p-4 bg-beige-50/30">
+      <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+        
         <div className="space-y-4">
           {messages.map((message) => (
             <div 
               key={message.id} 
-              className={`chat-message ${message.type === 'user' ? 'chat-message-user' : 'chat-message-bot'}`}
+              className={`chat-message ${message.type === 'user' ? 'chat-message-user' : 'chat-message-bot'} p-2 rounded-lg ${
+                message.type === 'user' ? 'bg-blue-300 ' : 'bg-blue-100 border border-gray-200 text-gray-900'
+              }`}
             >
               <div className="text-sm">
                 {message.content}
               </div>
-              <div className="text-xs text-beige-500 mt-1 text-right">
+              <div className="text-xs text-gray-500 mt-1 text-right">
                 {formatTime(message.timestamp)}
               </div>
             </div>
           ))}
           
           {loading && (
-            <div className="chat-message chat-message-bot">
+            <div className="chat-message">
               <div className="flex space-x-2">
-                <div className="w-2 h-2 bg-beige-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                <div className="w-2 h-2 bg-beige-300 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                <div className="w-2 h-2 bg-beige-300 rounded-full animate-bounce" style={{ animationDelay: '600ms' }}></div>
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '600ms' }}></div>
               </div>
             </div>
           )}
@@ -166,7 +167,7 @@ const Chatbot = () => {
         </div>
       </div>
       
-      <div className="p-4 border-t border-beige-100 bg-white">
+      <div className="p-4 border-t border-gray-200 bg-white">
         <div className="flex">
           <input
             ref={inputRef}
@@ -175,18 +176,18 @@ const Chatbot = () => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Type your question here..."
-            className="flex-1 px-4 py-2 border border-beige-200 rounded-l-lg focus:ring-2 focus:ring-beige-500 focus:border-transparent outline-none"
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-900"
           />
           <button
             onClick={handleSend}
-            className="px-4 py-2 bg-beige-500 text-white rounded-r-lg hover:bg-beige-600 flex items-center"
+            className="px-4 py-2 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 flex items-center"
           >
             <Send className="w-4 h-4" />
           </button>
         </div>
         
         {!hasCompletedAssessment && (
-          <div className="mt-3 text-sm text-beige-600 bg-beige-50 p-3 rounded-lg">
+          <div className="mt-3 text-sm text-gray-700 bg-yellow-50 p-3 rounded-lg">
             ⚠️ Complete the health assessment for personalized advice and to unlock report generation.
           </div>
         )}
@@ -195,11 +196,11 @@ const Chatbot = () => {
       {showReport && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto animate-fade-in">
-            <div className="flex justify-between items-center p-4 border-b border-beige-100">
-              <h2 className="font-semibold text-xl text-beige-800">Your Personalized Health Report</h2>
+            <div className="flex justify-between items-center p-4 border-b border-gray-200">
+              <h2 className="font-semibold text-xl text-gray-900">Your Personalized Health Report</h2>
               <button 
                 onClick={() => setShowReport(false)}
-                className="text-beige-500 hover:text-beige-700"
+                className="text-gray-600 hover:text-gray-800"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -207,26 +208,26 @@ const Chatbot = () => {
             
             <div className="p-6">
               <div className="mb-6">
-                <h3 className="font-semibold text-beige-800 mb-2">Basic Information</h3>
-                <div className="bg-beige-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-gray-900 mb-2">Basic Information</h3>
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                   <div className="grid grid-cols-2 gap-3">
                     <div className="text-sm">
-                      <span className="text-beige-600">Age:</span>
-                      <span className="text-beige-800 ml-2">{assessmentData?.age} years</span>
+                      <span className="text-gray-600">Age:</span>
+                      <span className="text-gray-900 ml-2">{assessmentData?.age} years</span>
                     </div>
                     <div className="text-sm">
-                      <span className="text-beige-600">Pregnancy Status:</span>
-                      <span className="text-beige-800 ml-2">{assessmentData?.isPregnant ? 'Pregnant' : 'Not Pregnant'}</span>
+                      <span className="text-gray-600">Pregnancy Status:</span>
+                      <span className="text-gray-900 ml-2">{assessmentData?.isPregnant ? 'Pregnant' : 'Not Pregnant'}</span>
                     </div>
                     {assessmentData?.isPregnant && (
                       <div className="text-sm">
-                        <span className="text-beige-600">Current Week:</span>
-                        <span className="text-beige-800 ml-2">{assessmentData?.pregnancyWeek}</span>
+                        <span className="text-gray-600">Current Week:</span>
+                        <span className="text-gray-900 ml-2">{assessmentData?.pregnancyWeek}</span>
                       </div>
                     )}
                     <div className="text-sm">
-                      <span className="text-beige-600">Taking Medications:</span>
-                      <span className="text-beige-800 ml-2">{assessmentData?.takingMedications ? 'Yes' : 'No'}</span>
+                      <span className="text-gray-600">Taking Medications:</span>
+                      <span className="text-gray-900 ml-2">{assessmentData?.takingMedications ? 'Yes' : 'No'}</span>
                     </div>
                   </div>
                 </div>
@@ -234,11 +235,11 @@ const Chatbot = () => {
               
               {assessmentData?.hasPreExistingConditions && assessmentData.conditions.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="font-semibold text-beige-800 mb-2">Pre-existing Conditions</h3>
-                  <div className="bg-beige-50 p-4 rounded-lg">
+                  <h3 className="font-semibold text-gray-900 mb-2">Pre-existing Conditions</h3>
+                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                     <div className="flex flex-wrap gap-2">
                       {assessmentData.conditions.map((condition, index) => (
-                        <span key={index} className="bg-beige-100 px-3 py-1 rounded-full text-sm text-beige-800">
+                        <span key={index} className="bg-blue-100 px-3 py-1 rounded-full text-sm text-gray-900">
                           {condition}
                         </span>
                       ))}
@@ -249,11 +250,11 @@ const Chatbot = () => {
               
               {assessmentData?.takingMedications && assessmentData.medications.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="font-semibold text-beige-800 mb-2">Current Medications</h3>
-                  <div className="bg-beige-50 p-4 rounded-lg">
+                  <h3 className="font-semibold text-gray-900 mb-2">Current Medications</h3>
+                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                     <ul className="space-y-2">
                       {assessmentData.medications.map((med, index) => (
-                        <li key={index} className="text-sm text-beige-800">• {med}</li>
+                        <li key={index} className="text-sm text-gray-900">• {med}</li>
                       ))}
                     </ul>
                   </div>
@@ -261,17 +262,17 @@ const Chatbot = () => {
               )}
               
               <div className="mb-6">
-                <h3 className="font-semibold text-beige-800 mb-2">Recommendations</h3>
-                <div className="bg-beige-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-gray-900 mb-2">Recommendations</h3>
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                   <div className="space-y-4">
-                    <p className="text-sm text-beige-800">
+                    <p className="text-sm text-gray-900">
                       {assessmentData?.isPregnant 
                         ? `Based on your pregnancy status (Week ${assessmentData.pregnancyWeek}), we recommend regular check-ups with your healthcare provider.`
                         : "Based on your health profile, we recommend focusing on general wellness and preventive care."}
                     </p>
                     
                     {assessmentData?.isPregnant && (
-                      <div className="text-sm text-beige-800">
+                      <div className="text-sm text-gray-900">
                         <p className="font-medium mb-1">For your current stage:</p>
                         <ul className="list-disc pl-5 space-y-1">
                           <li>Stay hydrated and maintain a balanced diet rich in essential nutrients</li>
@@ -283,7 +284,7 @@ const Chatbot = () => {
                     )}
                     
                     {assessmentData?.takingMedications && (
-                      <p className="text-sm text-beige-800">
+                      <p className="text-sm text-gray-900">
                         Please consult with your healthcare provider about the safety of your current medications{assessmentData.isPregnant ? ' during pregnancy' : ''}.
                       </p>
                     )}
@@ -291,18 +292,17 @@ const Chatbot = () => {
                 </div>
               </div>
               
-              <div className="text-center p-4 bg-beige-50 rounded-lg text-beige-600 text-sm">
-                <p className="font-medium text-beige-700 mb-1">Important Disclaimer</p>
+              <div className="text-center p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-700 text-sm">
+                <p className="font-medium text-gray-900 mb-1">Important Disclaimer</p>
                 <p>This report is generated for informational purposes only and is not a substitute for professional medical advice. Always consult with your healthcare provider for medical guidance.</p>
                 <div className="flex justify-center mt-4">
                   <button
-                    className="flex items-center px-10 py-1.5 rounded-lg text-sm bg-beige-500 text-white hover:bg-beige-600"
+                    className="flex items-center px-10 py-1.5 rounded-lg text-sm bg-blue-600 text-white hover:bg-blue-700"
                   >
                     <span>Download PDF</span>
                   </button>  
                 </div>           
               </div>
-
             </div>
           </div>
         </div>

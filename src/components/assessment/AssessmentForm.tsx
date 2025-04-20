@@ -130,9 +130,9 @@ const AssessmentForm = () => {
   return (
     <div className="min-h-[calc(100vh-200px)] flex items-center justify-center py-12 px-4">
       <div className="form-container">
-        <div className="w-full bg-beige-100 h-2 rounded-full mb-8">
+        <div className="w-full bg-blue-100 h-2 rounded-full mb-8">
           <div
-            className="bg-beige-500 h-2 rounded-full transition-all duration-500"
+            className="bg-blue-500 h-2 rounded-full transition-all duration-500"
             style={{ width: `${getProgress()}%` }}
           ></div>
         </div>
@@ -144,7 +144,7 @@ const AssessmentForm = () => {
         <div className="flex justify-between mt-8">
           <button
             onClick={prevStep}
-            className={`px-4 py-2 rounded-full border border-beige-200 text-beige-700 ${step === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-beige-50'}`}
+            className={`px-4 py-2 rounded-full border border-blue-200 text-blue-700 ${step === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-50'}`}
             disabled={step === 0}
           >
             Back

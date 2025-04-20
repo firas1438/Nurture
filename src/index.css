@@ -97,6 +97,8 @@
   }
 }
 
+
+
 @layer components {
   .form-container {
     @apply bg-white/70 backdrop-blur-sm rounded-2xl p-6 max-w-md w-full mx-auto shadow-lg;
@@ -122,3 +124,35 @@
     @apply bg-beige-50 border border-beige-100 mr-auto;
   }
 }
+
+
+.animate-orbit {
+  animation: orbit 8s linear infinite;
+}
+
+.animate-orbit-delay {
+  animation: orbit 6s linear infinite reverse;
+  animation-delay: 2s;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(-5%); }
+  50% { transform: translateY(5%); }
+}
+@keyframes slide-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes orbit {
+  0% { transform: rotate(0deg) translateX(80px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
+}
+@keyframes orbit-delay {
+  0% { transform: rotate(0deg) translateX(60px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
+}
+

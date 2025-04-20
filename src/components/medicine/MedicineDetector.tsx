@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { X, FileText, Upload } from 'lucide-react';
+import { X, FileText, Upload, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 type DetectionResult = {
@@ -31,10 +31,10 @@ const MedicineDetector = () => {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [detectionResult, setDetectionResult] = useState<DetectionResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const handleImageUpload = (file: File) => {
     if (file) {
       if (!file.type.startsWith('image/')) {
         toast.error("Please upload an image file.");
@@ -51,6 +51,31 @@ const MedicineDetector = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleImageUpload(file);
+    }
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(false);
+    const file = event.dataTransfer.files?.[0];
+    if (file) {
+      handleImageUpload(file);
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
   };
 
   const detectMedicine = (imageUrl: string) => {
@@ -72,54 +97,63 @@ const MedicineDetector = () => {
   };
 
   const getSafetyBadge = (safety: 'safe' | 'caution' | 'unsafe') => {
-    switch (safety) {
-      case 'safe':
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-            Safe
-          </span>
-        );
-      case 'caution':
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-            Use with Caution
-          </span>
-        );
-      case 'unsafe':
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-            Not Recommended
-          </span>
-        );
-    }
+    const badgeStyles = {
+      safe: 'bg-green-100 text-green-800',
+      caution: 'bg-yellow-100 text-yellow-800',
+      unsafe: 'bg-red-100 text-red-800',
+    };
+
+    const iconStyles = 'w-5 h-5 mr-1.5';
+
+    return (
+      <span
+        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+          badgeStyles[safety]
+        } animate-pulse`}
+      >
+        {safety === 'safe' && <CheckCircle className={iconStyles} />}
+        {safety === 'caution' && <AlertCircle className={iconStyles} />}
+        {safety === 'unsafe' && <XCircle className={iconStyles} />}
+        {safety === 'safe' && 'Safe'}
+        {safety === 'caution' && 'Use with Caution'}
+        {safety === 'unsafe' && 'Not Recommended'}
+      </span>
+    );
   };
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-beige-100">
-        <div className="bg-beige-50 p-4 border-b border-beige-100">
-          <h2 className="font-semibold text-beige-800 flex items-center">
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-blue-100">
+        <div className="bg-blue-50 p-4 border-b border-blue-100">
+          <h2 className="font-semibold text-blue-800 flex items-center">
             <Upload className="w-5 h-5 mr-2" />
             <span>Medicine Safety Detector</span>
           </h2>
-          <p className="text-sm text-beige-600 mt-1">
+          <p className="text-sm text-blue-600 mt-1">
             Upload an image of your medication to check if it's safe during pregnancy.
           </p>
         </div>
 
         <div className="p-6">
           {!capturedImage ? (
-            <div className="text-center py-10">
-              <div className="w-20 h-20 bg-beige-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Upload className="w-10 h-10 text-beige-500" />
+            <div
+              className={`text-center py-10 border-2 border-dashed rounded-lg transition-colors ${
+                isDragging ? 'border-blue-500 bg-blue-50' : 'border-blue-200 bg-blue-100'
+              }`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <div className="w-20 h-20 bg-blue-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Upload className="w-10 h-10 text-blue-500" />
               </div>
-              <h3 className="text-xl font-medium text-beige-800 mb-2">Medicine Detection</h3>
-              <p className="text-beige-600 max-w-md mx-auto mb-6">
-                Upload a clear image of the medicine packaging or label to get information about its safety during pregnancy.
+              <h3 className="text-xl font-medium text-blue-800 mb-2">Medicine Detection</h3>
+              <p className="text-blue-600 max-w-md mx-auto mb-6">
+                Drag and drop a clear image of the medicine packaging or label here, or click to upload.
               </p>
               <label
                 htmlFor="image-upload"
-                className="px-6 py-3 bg-beige-500 text-white rounded-full font-medium shadow-md hover:bg-beige-600 transition-colors cursor-pointer"
+                className="px-6 py-3 bg-blue-500 text-white rounded-full font-medium shadow-md hover:bg-blue-600 transition-colors cursor-pointer"
               >
                 Upload Image
               </label>
@@ -128,7 +162,7 @@ const MedicineDetector = () => {
                 type="file"
                 accept="image/*"
                 ref={fileInputRef}
-                onChange={handleImageUpload}
+                onChange={handleFileInputChange}
                 className="hidden"
               />
             </div>
@@ -137,11 +171,15 @@ const MedicineDetector = () => {
           {capturedImage && (
             <div className="mt-4 animate-fade-in">
               <div className="relative">
-                <img src={capturedImage} alt="Uploaded medicine" className="w-full h-auto rounded-lg" />
+                <img
+                  src={capturedImage}
+                  alt="Uploaded medicine"
+                  className="max-w-full max-h-96 object-contain rounded-lg mx-auto"
+                />
                 {!detectionResult && !loading && (
                   <button
                     onClick={resetDetection}
-                    className="absolute top-2 right-2 p-2 bg-white/80 text-beige-700 rounded-full shadow-sm hover:bg-white"
+                    className="absolute top-2 right-2 p-2 bg-white/80 text-blue-700 rounded-full shadow-sm hover:bg-white"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -150,35 +188,35 @@ const MedicineDetector = () => {
 
               {loading && (
                 <div className="mt-6 text-center py-8">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-beige-500 mx-auto mb-4"></div>
-                  <p className="text-beige-700">Analyzing image...</p>
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                  <p className="text-blue-700">Analyzing image...</p>
                 </div>
               )}
 
               {detectionResult && (
-                <div className="mt-6 bg-beige-50 p-6 rounded-xl animate-fade-in">
+                <div className="mt-6 bg-blue-50 p-6 rounded-xl animate-fade-in">
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="text-xl font-semibold text-beige-800">{detectionResult.name}</h3>
-                      <div className="mt-1">
+                      <h3 className="text-xl font-semibold text-blue-800">{detectionResult.name}</h3>
+                      <div className="mt-4">
                         {getSafetyBadge(detectionResult.safetyRating)}
                       </div>
                     </div>
                     <button
                       onClick={resetDetection}
-                      className="p-2 text-beige-500 hover:text-beige-700"
+                      className="p-2 text-blue-500 hover:text-blue-700"
                     >
                       <X className="w-5 h-5" />
                     </button>
                   </div>
 
-                  <div className="prose prose-sm text-beige-700">
+                  <div className="prose prose-sm text-black">
                     <p>{detectionResult.description}</p>
                   </div>
 
-                  <div className="mt-6 bg-beige-100 p-4 rounded-lg text-sm text-beige-700">
+                  <div className="mt-6 bg-blue-100 p-4 rounded-lg text-sm text-blue-700">
                     <div className="flex items-start">
-                      <FileText className="w-5 h-5 mr-2 text-beige-500 flex-shrink-0 mt-0.5" />
+                      <FileText className="w-5 h-5 mr-2 text-blue-500 flex-shrink-0 mt-0.5" />
                       <p>
                         <span className="font-medium">Note:</span> This information is provided for educational purposes only. Always consult with your healthcare provider before taking any medication during pregnancy.
                       </p>
@@ -188,7 +226,7 @@ const MedicineDetector = () => {
                   <div className="mt-6 flex justify-center">
                     <button
                       onClick={resetDetection}
-                      className="px-6 py-2 bg-beige-500 text-white rounded-full font-medium shadow-md hover:bg-beige-600 transition-colors"
+                      className="px-6 py-2 bg-blue-500 text-white rounded-full font-medium shadow-md hover:bg-blue-600 transition-colors"
                     >
                       Upload Another Image
                     </button>
