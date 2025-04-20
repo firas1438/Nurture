@@ -1,0 +1,124 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 30 25% 97%;
+    --foreground: 30 10% 15%;
+
+    --card: 30 25% 98%;
+    --card-foreground: 30 10% 15%;
+
+    --popover: 30 25% 98%;
+    --popover-foreground: 30 10% 15%;
+
+    --primary: 29 85% 53%;
+    --primary-foreground: 30 5% 98%;
+
+    --secondary: 27 25% 92%;
+    --secondary-foreground: 30 10% 15%;
+
+    --muted: 27 20% 90%;
+    --muted-foreground: 30 5% 40%;
+
+    --accent: 30 40% 90%;
+    --accent-foreground: 30 10% 15%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 30 20% 87%;
+    --input: 30 20% 87%;
+    --ring: 28 85% 53%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 30 15% 10%;
+    --foreground: 30 5% 95%;
+
+    --card: 30 15% 12%;
+    --card-foreground: 30 5% 95%;
+
+    --popover: 30 15% 12%;
+    --popover-foreground: 30 5% 95%;
+
+    --primary: 28 85% 55%;
+    --primary-foreground: 30 5% 10%;
+
+    --secondary: 27 15% 20%;
+    --secondary-foreground: 30 5% 95%;
+
+    --muted: 27 15% 25%;
+    --muted-foreground: 30 5% 70%;
+
+    --accent: 30 15% 25%;
+    --accent-foreground: 30 5% 95%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 30 15% 25%;
+    --input: 30 15% 25%;
+    --ring: 28 85% 60%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer components {
+  .form-container {
+    @apply bg-white/70 backdrop-blur-sm rounded-2xl p-6 max-w-md w-full mx-auto shadow-lg;
+  }
+  
+  .form-question {
+    @apply flex flex-col items-center space-y-4 min-h-[300px] justify-center;
+  }
+  
+  .form-button {
+    @apply px-6 py-2 rounded-full bg-beige-500 text-white font-medium shadow-md hover:bg-beige-600 transition-colors;
+  }
+  
+  .chat-message {
+    @apply p-4 rounded-xl max-w-[85%] animate-fade-in;
+  }
+  
+  .chat-message-user {
+    @apply bg-beige-100 ml-auto;
+  }
+  
+  .chat-message-bot {
+    @apply bg-beige-50 border border-beige-100 mr-auto;
+  }
+}
