@@ -35,12 +35,17 @@ Access the live application [here](https://nurtureai.vercel.app).
    cd nurture
    ```
 
-2. Install dependencies
+2. Create a .env file in the root directory and add your environment variables.
+   ```bash
+   VITE_GEMINI_API_KEY=your_api_key_here
+   ```
+
+3. Install dependencies
    ```bash
    npm install
    ```
 
-3. Start the application
+4. Start the application
    ```bash
    npm run dev
    ```
