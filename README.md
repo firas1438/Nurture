@@ -1,27 +1,23 @@
-Welcome to **Nurture** — your smart companion for a healthy pregnancy journey.  
-This project empowers expecting mothers by offering personalized advice, medication checks, and continuous AI support.
+# Nurture
 
-## Key Features
-- Personalized health assessment through an easy form
+Nurture is a smart web application designed to support a healthy pregnancy journey. It provides expecting mothers with personalized advice, medication safety checks, and continuous AI assistance.
+
+## Features
+- Personalized health assessment via a simple form
 - Real-time AI assistant for pregnancy-related advice and tips
-- Medication safety checker via image upload
-- Modern, accessible, and responsive interface
-- Built with cutting-edge web technologies for a smooth experience
+- Medication safety verification through image uploads
+- Modern, accessible, and responsive user interface
+- Built with modern web technologies for optimal performance
 
 ## Live Demo
-Try it here 👉 [Click to open the live app](https://nurtureai.vercel.app)
+Access the live application [here](https://nurtureai.vercel.app).
 
 ## How It Works
-1. **Complete Assessment**  
-Answer personalized health questions to guide your pregnancy journey.
+1. Complete a personalized health assessment to guide your pregnancy.
+2. Interact with the AI assistant for tailored advice and tips.
+3. Upload medication images to verify their safety during pregnancy.
 
-2. **Get AI Support**  
-Chat with our AI assistant for tailored advice and pregnancy tips.
-
-3. **Check Medicine**  
-Attach images of medications to verify their safety during pregnancy.
-
-## Built With
+## Technologies Used
 - Vite
 - TypeScript
 - React
