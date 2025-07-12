@@ -49,7 +49,7 @@ const MedicationQuestion: React.FC<MedicationQuestionProps> = ({
       
       {takingMedications && (
         <div className="w-full animate-fade-in">
-          <p className="text-blue-700 text-sm mb-2">Please list all medications you're currently taking:</p>
+          <p className=" text-sm mb-2 mt-6">Please list all medications you're currently taking:</p>
           
           <div className="flex mb-2">
             <input
@@ -83,7 +83,7 @@ const MedicationQuestion: React.FC<MedicationQuestionProps> = ({
               ))}
             </div>
           ) : (
-            <p className="text-sm text-blue-600 italic mt-2">No medications added yet.</p>
+            <p className="text-sm text-orange-500 italic mt-4">No medications added yet.</p>
           )}
         </div>
       )}

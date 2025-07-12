@@ -8,7 +8,8 @@ const Footer = () => {
 
       <div className="container mx-auto px-4">
         <div className=" mt-2  text-center">
-          <p className="text-black-700">© {new Date().getFullYear()} Gentle Birth Assistant AI. All rights reserved.</p>
+          <p className="text-black-700">© {new Date().getFullYear()} Nurture AI. All rights reserved.</p>
+          
         </div>
       </div>
 
@@ -17,3 +18,7 @@ const Footer = () => {
 };
 
 export default Footer;
+
+
+
+

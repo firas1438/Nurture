@@ -38,13 +38,13 @@ const contentVariants = {
 const MedicineDetectorPage = () => {
   return (
     <motion.div
-      className="relative flex flex-col min-h-screen"
+      className="relative flex flex-col min-h-screen "
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
       {/* Decorative Crystal Ball (unchanged) */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-clip">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative w-80 h-80 rounded-full bg-blue-100/20 blur-3xl animate-float-slow">
             <div className="absolute w-48 h-48 rounded-full bg-blue-200/30 blur-2xl animate-pulse-slow top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { LucideArrowRightLeft, LucideFileQuestion, LucideFormInput, LucideMailQuestion, LucideMessageCircle, LucideMessageCircleQuestion, LucidePillBottle, LucideUpload } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -11,16 +13,8 @@ const Hero = () => {
   // Function to animate each character one by one
   const titleVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        delayChildren: 0.2,
-        staggerChildren: 0.1, // Delay between each character
-      },
-    },
+    visible: { opacity: 1, transition: { duration: 0.5, delayChildren: 0.2, staggerChildren: 0.1, },},
   };
-
   const characterVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1 },
@@ -34,9 +28,9 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative py-32 md:py-40 overflow-hidden bg-gradient-to-br from-white to-gray-100">
+    <div className="relative py-12 overflow-hidden bg-gradient-to-br from-white to-gray-100">
       {/* Decorative Crystal Ball */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-clip">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative w-80 h-80 rounded-full bg-blue-100/20 blur-3xl animate-float-slow">
             <div className="absolute w-48 h-48 rounded-full bg-blue-200/30 blur-2xl animate-pulse-slow top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
@@ -100,21 +94,13 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="flex flex-col md:flex-row items-center">
+      <div className="container mx-auto px-6 sm:px-20 relative z-10">
+
+        {/* Hero Section */}
+        <section className="flex flex-col md:flex-row items-center my-16">
           {/* Left Section */}
-          <motion.div
-            className="md:w-1/2 pl-20"
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <motion.h1
-              className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight"
-              initial="hidden"
-              animate="visible"
-              variants={titleVariants}
-            >
+          <motion.div className="md:w-1/2" initial={{ opacity: 0, x: -100 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
+            <motion.h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight" initial="hidden" animate="visible" variants={titleVariants}>
               {/* Animate title characters */}
               {titleText.split("").map((char, index) => (
                 <motion.span key={index} variants={characterVariants}>
@@ -131,54 +117,29 @@ const Hero = () => {
               </span>
             </motion.h1>
 
-            <p className="text-lg text-gray-700 mb-8">
+            <p className="text-lg  text-gray-700 mb-8">
               Personalized guidance, health monitoring, and support throughout
               your pregnancy. Experience the perfect blend of care and
               technology.
             </p>
-            <button
-              onClick={() => navigate("/assessment")}
-              className="px-10 py-3 bg-blue-500 text-white rounded-full font-semibold shadow-md hover:bg-blue-600 transition-transform transform hover:scale-105"
-            >
+            <button onClick={() => navigate("/assessment")} className="mt-1 px-10 py-3 bg-blue-500 text-white rounded-full font-semibold shadow-md hover:bg-blue-600 transition-transform transform hover:scale-105">
               Start Health Assessment
             </button>
           </motion.div>
 
-{/* Right Section */}
-<motion.div
-  className="md:w-1/2 mt-12 md:mt-0 flex justify-center"
-  initial={{ opacity: 0, y: 100 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.9, delay: 0.2 }}
->
-  <motion.div
-    className="relative w-full max-w-md" // Changed from max-w-lg to max-w-md
-    animate={{
-      y: ["0", "-10px", "0", "10px", "0"], // Float effect (up and down)
-      scale: [1.05, 1.1, 1.05], // Slightly larger zoom effect
-    }}
-    transition={{
-      duration: 6,
-      ease: "easeInOut",
-      repeat: Infinity,
-      repeatType: "loop",
-    }}
-  >
-    <img
-      src="./momp.png"
-      alt="Pregnancy illustration"
-      className="w-full h-auto"
-    />
-  </motion.div>
-</motion.div>
+          {/* Right Section */}
+          <motion.div className="md:w-1/2 mt-12 md:mt-0 flex justify-center" initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.2 }}>
+            <motion.div className="relative w-full max-w-md" animate={{ y: ["0", "-10px", "0", "10px", "0"],  scale: [1.05, 1.1, 1.05],  }} transition={{ duration: 6, ease: "easeInOut", repeat: Infinity, repeatType: "loop", }}>
+              <img src="./mompic.png" alt="Pregnancy illustration" className="w-full h-auto"/>
+            </motion.div>
+          </motion.div>
 
-          
-        </div>
+        </section>
 
         {/* How It Works Section */}
-        <div className="mt-28 text-center mb-24">
+        <section className="mt-36 text-center mb-32">
           <h2 className="text-3xl font-bold text-gray-900 mb-8">
-            How It Works
+            How It <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-sky-400">Works</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -237,15 +198,15 @@ const Hero = () => {
               </p>
             </motion.div>
           </div>
-        </div>
+        </section>
 
         {/* FAQ Accordion Section */}
-        <div className="mt-16">
+        <section className="mt-16">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Frequently Asked Questions
+            Frequently Asked <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-sky-400">Questions</span>
           </h2>
 
-          <div className="max-w-full mx-auto mt-8 bg-white px-8 py-2 rounded-lg shadow-lg">
+          <div className="max-w-6xl mx-auto mt-8 bg-white px-8 pt-2 pb-4 rounded-lg shadow-lg">
             {[
               {
                 question: "What is this AI companion?",
@@ -287,7 +248,29 @@ const Hero = () => {
               </div>
             ))}
           </div>
-        </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="mt-24 container mx-auto px-4 relative z-10">
+            <Card className="overflow-hidden">
+              <CardContent className="p-0">
+                <div className="bg-gradient-to-r from-blue-700 to-sky-400 p-8 md:p-16 text-white text-center">
+                  <h2 className="text-3xl font-bold mb-4">Ready to Start Your Journey?</h2>
+                  <p className="text-lg max-w-xl mx-auto mb-8">
+                    NurtureAI is here to support you through every step of your pregnancy with personalized guidance and care.
+                  </p>
+                  <Button 
+                    size="lg" 
+                    className="bg-white text-blue-500 font-semibold hover:bg-white/90 rounded-full"
+                    onClick={() => navigate('/chatbot')}
+                  >
+                    Take the Health Assessment
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+        </section>
+
       </div>
     </div>
   );

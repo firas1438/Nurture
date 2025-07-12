@@ -10,7 +10,6 @@ const AssessmentPage = () => {
       <Navbar />
       <main className="flex-grow">
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold text-blue-800 text-center mb-8">Health Assessment</h1>
           <AssessmentForm />
         </div>
       </main>

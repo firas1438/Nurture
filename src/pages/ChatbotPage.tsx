@@ -42,13 +42,9 @@ const ChatbotPage = () => {
   const hasCompletedAssessment = localStorage.getItem('assessmentData') !== null;
 
   return (
-    <motion.div
-      className="relative flex flex-col min-h-screen"
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-    >
-      {/* Decorative Crystal Ball (unchanged) */}
+    <motion.div className="relative flex flex-col min-h-screen overflow-clip" initial="hidden" animate="visible" variants={containerVariants}>
+
+      {/* Decorative Crystal Ball  */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative w-80 h-80 rounded-full bg-blue-100/20 blur-3xl animate-float-slow">
@@ -114,69 +110,36 @@ const ChatbotPage = () => {
 
       <Navbar />
 
-      <motion.main
-        className="flex-grow relative z-10"
-        variants={containerVariants}
-      >
+      <motion.main className="flex-grow relative z-10" variants={containerVariants}>
         <div className="container mx-auto px-4 py-8">
-          <motion.h1
-            className="text-3xl font-bold text-blue-600 text-center mb-2 mt-4"
-            variants={childVariants}
-          >
+          <motion.h1 className="text-3xl font-bold text-blue-600 text-center mb-2 mt-4" variants={childVariants}>
             AI Health Assistant
           </motion.h1>
-          <motion.p
-            className="text-black text-center mb-8"
-            variants={childVariants}
-          >
+          <motion.p className="text-black text-center mb-8" variants={childVariants}>
             Get personalized advice and support for your pregnancy journey
           </motion.p>
 
           <AnimatePresence mode="wait">
             {!hasCompletedAssessment ? (
-              <motion.div
-                key="assessment-prompt"
-                className="max-w-2xl mx-auto bg-blue-50 p-6 rounded-xl mb-8 border border-blue-100"
-                variants={contentVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <motion.h2
-                  className="text-xl font-semibold text-blue-800 mb-3"
-                  variants={childVariants}
-                >
+              <motion.div key="assessment-prompt" className="max-w-4xl mx-auto bg-blue-50 p-6 rounded-xl mb-8 border border-blue-100" variants={contentVariants} initial="hidden" animate="visible" exit="exit">
+                <motion.h2 className="text-xl font-bold mb-3" variants={childVariants}>
                   Complete Your Assessment First
                 </motion.h2>
-                <motion.p
-                  className="text-blue-700 mb-4"
-                  variants={childVariants}
-                >
+                <motion.p className=" mb-4" variants={childVariants}>
                   To get the most personalized advice, please complete a brief health assessment. 
-                  This will help our AI tailor recommendations specifically for you.
+                  This will help our AI tailor recommendations specifically for you. Takes only about 2-3 minutes.
                 </motion.p>
-                <motion.button
-                  onClick={() => navigate('/assessment')}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-full font-medium shadow-md hover:bg-blue-600 transition-colors"
-                  variants={childVariants}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
+                <motion.button onClick={() => navigate('/assessment')} className="px-6 py-2 bg-gray-800 text-white rounded-full font-medium shadow-md hover:bg-gray-600 transition-colors" variants={childVariants} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   Start Assessment
                 </motion.button>
               </motion.div>
             ) : (
-              <motion.div
-                key="chatbot"
-                variants={contentVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
+              <motion.div key="chatbot" variants={contentVariants} initial="hidden" animate="visible" exit="exit">
                 <Chatbot />
               </motion.div>
             )}
           </AnimatePresence>
+          
         </div>
       </motion.main>
       <Footer />
