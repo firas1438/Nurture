@@ -1,5 +1,4 @@
-# Nurture
-
+## Nurture
 Nurture is a smart web application designed to support a healthy pregnancy journey. It provides expecting mothers with personalized advice, medication safety checks, and continuous AI assistance.
 
 ## Features
