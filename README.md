@@ -18,6 +18,7 @@ Access the live application [here](https://nurtureai.vercel.app).
 1. Complete a personalized health assessment to guide your pregnancy.
 2. Interact with the AI assistant for tailored advice and tips.
 3. Upload medication images to verify their safety during pregnancy.
+4. Download a full report depending on previous interactions.
 
 ## Technologies Used
 - Vite
