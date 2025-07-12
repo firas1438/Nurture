@@ -20,7 +20,7 @@ Access the live application [here](https://nurtureai.vercel.app).
 - Vite
 - TypeScript
 - React
-- shadcn-ui
+- Framer Motion
 - Tailwind CSS
 
 ## Getting Started
