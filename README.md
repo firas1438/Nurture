@@ -31,7 +31,7 @@ Access the live application [here](https://nurtureai.vercel.app).
 
 1. Clone the project
    ```bash
-   git clone https://github.com/firas1438/nurture.git
+   git clone https://github.com/firas1438/Nurture.git
    cd nurtureai
    ```
 
